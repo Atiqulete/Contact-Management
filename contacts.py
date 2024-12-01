@@ -20,7 +20,15 @@ def is_duplicate_number(phone, contacts):
 
 def add_contact():
     name = input("Enter Name: ")
-    email = input("Enter Email: ")
+    
+    # Validate email input
+    while True:
+        email = input("Enter Email: ")
+        if "@" in email:
+            break
+        else:
+            print("Invalid email address. Please include '@' in your email.")
+    
     phone = input("Enter Phone: ")
     address = input("Enter Address: ")
 
@@ -59,17 +67,22 @@ def update_contact():
             contact_found = True
             print(f"Found contact: {contact['name']} - {contact['email']} - {contact['phone']} - {contact['address']}")
             
-            # Update details
             contact['name'] = input(f"Enter new name (or press Enter to keep '{contact['name']}'): ") or contact['name']
-            contact['email'] = input(f"Enter new email (or press Enter to keep '{contact['email']}'): ") or contact['email']
+            
+            while True:
+                new_email = input(f"Enter new email (or press Enter to keep '{contact['email']}'): ")
+                if not new_email or "@" in new_email:
+                    contact['email'] = new_email or contact['email']
+                    break
+                else:
+                    print("Invalid email address. Please include '@' in your email.")
+            
             contact['address'] = input(f"Enter new address (or press Enter to keep '{contact['address']}'): ") or contact['address']
             
-            # Optionally, update phone number if needed
             new_phone = input(f"Enter new phone number (or press Enter to keep '{contact['phone']}'): ")
             if new_phone:
                 contact['phone'] = new_phone
 
-            # Re-save updated contacts to file
             with open(contacts_file, "w") as file:
                 for updated_contact in contacts:
                     file.write(f"{updated_contact['name']},{updated_contact['email']},{updated_contact['phone']},{updated_contact['address']}\n")
